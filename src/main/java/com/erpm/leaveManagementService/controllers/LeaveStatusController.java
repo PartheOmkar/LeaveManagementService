@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpm.leaveManagementService.entitys.LeaveStatus;
+import com.erpm.leaveManagementService.exceptions.LeaveStatusNotFound;
 import com.erpm.leaveManagementService.services.LeaveStatusService;
 
 @RestController
@@ -29,7 +30,7 @@ public class LeaveStatusController {
 	}
 	
 	@GetMapping("/{leaveStatusId}")
-	public ResponseEntity<LeaveStatus> getLeaveStatusById(@PathVariable int leaveStatusId){
+	public ResponseEntity<LeaveStatus> getLeaveStatusById(@PathVariable int leaveStatusId) throws LeaveStatusNotFound{
 		LeaveStatus leaveStatus = leaveStatusService.getLeaveStatusById(leaveStatusId);
 		return ResponseEntity.ok(leaveStatus);
 	}

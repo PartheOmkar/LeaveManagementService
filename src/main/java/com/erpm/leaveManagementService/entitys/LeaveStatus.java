@@ -7,16 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class LeaveStatus {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,4 +16,29 @@ public class LeaveStatus {
 	private String leaveStatus;
 	@OneToMany(mappedBy = "status")
 	private Set<LeaveRequest> leaveRequests;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getLeaveStatus() {
+		return leaveStatus;
+	}
+
+	public void setLeaveStatus(String leaveStatus) {
+		this.leaveStatus = leaveStatus;
+	}
+
+	public Set<LeaveRequest> getLeaveRequests() {
+		return leaveRequests;
+	}
+
+	public void setLeaveRequests(Set<LeaveRequest> leaveRequests) {
+		this.leaveRequests = leaveRequests;
+	}
+
 }
