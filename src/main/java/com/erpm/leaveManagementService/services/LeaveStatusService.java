@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.erpm.leaveManagementService.entitys.LeaveStatus;
 import com.erpm.leaveManagementService.exceptions.LeaveStatusNotFound;
 import com.erpm.leaveManagementService.repositorys.LeaveStatusRepository;
 
+@Service
 public class LeaveStatusService {
 
 	@Autowired
@@ -23,7 +25,7 @@ public class LeaveStatusService {
 		try {
 			leaveStatus = leaveStatusRepository.findById(leaveStatusId).get();
 		} catch (NoSuchElementException ex) {
-			throw new LeaveStatusNotFound("leave status +"+leaveStatusId+" not found");
+			throw new LeaveStatusNotFound("leave status "+leaveStatusId+" not found");
 		}
 		return leaveStatus;
 	}

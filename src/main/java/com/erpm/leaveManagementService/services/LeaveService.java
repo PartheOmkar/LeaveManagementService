@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.erpm.leaveManagementService.dtos.LeaveRequestDto;
 import com.erpm.leaveManagementService.entitys.LeaveRequest;
 import com.erpm.leaveManagementService.exceptions.LeaveRequestNotFound;
+import com.erpm.leaveManagementService.exceptions.LeaveStatusNotFound;
+import com.erpm.leaveManagementService.exceptions.LeaveTypeNotFound;
 import com.erpm.leaveManagementService.repositorys.LeaveRepository;
 
 @Service
@@ -16,11 +19,16 @@ public class LeaveService {
 
 	@Autowired
 	LeaveRepository leaveRepository;
+	@Autowired
+	LeaveTypeService leaveTypeService;
+	@Autowired
+	LeaveStatusService leaveStatusService;
 
-	public LeaveRequest leaveRequest(LeaveRequest newleaveRequest) {
-		LeaveRequest leaveRequest = null;
+	public LeaveRequestDto leaveRequest(LeaveRequestDto newleaveRequest) throws LeaveTypeNotFound, LeaveStatusNotFound {
+		LeaveRequestDto leaveRequest = null;
 		try {
-			leaveRequest = leaveRepository.save(newleaveRequest);
+			LeaveRequest lea = leaveRepository.save(getLeaveRequest(newleaveRequest));
+			leaveRequest = new LeaveRequestDto(lea);
 		} catch (OptimisticLockingFailureException ex) {
 			throw ex;
 		} catch (IllegalArgumentException ex) {
@@ -29,34 +37,48 @@ public class LeaveService {
 		return leaveRequest;
 	}
 
-	public LeaveRequest getLeaveRequest(int leaveId) throws LeaveRequestNotFound {
-		LeaveRequest leaveRequest = null;
+	public LeaveRequestDto getLeaveRequest(int leaveId) throws LeaveRequestNotFound {
+		LeaveRequestDto leaveRequestDto = null;
 		try {
-			leaveRequest = leaveRepository.findById(leaveId).get();
+			LeaveRequest leaveRequest = leaveRepository.findById(leaveId).get();
+			leaveRequestDto = new LeaveRequestDto(leaveRequest);
 		} catch (NoSuchElementException ex) {
-			throw new LeaveRequestNotFound("leave request id = "+leaveId+" not found");
+			throw new LeaveRequestNotFound("leave request id = " + leaveId + " not found");
 		}
-		return leaveRequest;
+		return leaveRequestDto;
 	}
 
-	public List<LeaveRequest> getLeaveRequests() {
-		return leaveRepository.findAll();
+	public List<LeaveRequestDto> getLeaveRequests() {
+		return leaveRepository.findAll().stream().map(leaveRequest -> new LeaveRequestDto(leaveRequest)).toList();
 	}
 
-	public LeaveRequest updateLeaveRequest(LeaveRequest newleaveRequest) throws LeaveRequestNotFound {
-		LeaveRequest leaveRequest = null;
+	public LeaveRequestDto updateLeaveRequest(LeaveRequestDto newleaveRequest) throws LeaveRequestNotFound, LeaveStatusNotFound {
+		LeaveRequestDto leaveRequestDto = null;
 		try {
-			leaveRequest = leaveRepository.findById(newleaveRequest.getId()).get();
+			LeaveRequest leaveRequest = leaveRepository.findById(newleaveRequest.getId()).get();
+			leaveRequest.setStatus(leaveStatusService.getLeaveStatusById(newleaveRequest.getStatusId()));
+			leaveRequest = leaveRepository.save(leaveRequest);
+			leaveRequestDto = new LeaveRequestDto(leaveRequest);
 		} catch (NoSuchElementException ex) {
-			throw new LeaveRequestNotFound("leave request id = +"+newleaveRequest.getId()+" not found");
+			throw new LeaveRequestNotFound("leave request id = +" + newleaveRequest.getId() + " not found");
 		}
-		leaveRequest.setStartDate(newleaveRequest.getStartDate());
-		leaveRequest.setEndDate(newleaveRequest.getEndDate());
-		return leaveRequest;
+		return leaveRequestDto;
 	}
 
 	public void deleteLeaveRequest(int leaveId) {
 		leaveRepository.deleteById(leaveId);
 	}
 
+	public LeaveRequest getLeaveRequest(LeaveRequestDto leaveRequestDto) throws LeaveTypeNotFound, LeaveStatusNotFound {
+		LeaveRequest leaveRequest= new LeaveRequest();
+		leaveRequest.setEmployeeId(leaveRequestDto.getEmployeeId());
+		leaveRequest.setStartDate(leaveRequestDto.getStartDate());
+		leaveRequest.setEndDate(leaveRequestDto.getEndDate());
+		leaveRequest.setLeaveType(leaveTypeService.getLeaveType(leaveRequestDto.getLeaveTypeId()));
+		leaveRequest.setStatus(leaveStatusService.getLeaveStatusById(leaveRequestDto.getStatusId()));
+		leaveRequest.setReason(leaveRequestDto.getReason());
+		leaveRequest.setAdditionalComments(leaveRequestDto.getAdditionalComments());
+		leaveRequest.setApproverId(leaveRequestDto.getApproverId());
+		return leaveRequest;
+	}
 }

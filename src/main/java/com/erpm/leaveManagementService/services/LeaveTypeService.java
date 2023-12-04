@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.erpm.leaveManagementService.entitys.LeaveType;
 import com.erpm.leaveManagementService.exceptions.LeaveTypeNotFound;
 import com.erpm.leaveManagementService.repositorys.LeaveTypeRepository;
 
+@Service
 public class LeaveTypeService {
 
 	@Autowired
