@@ -2,6 +2,8 @@ package com.erpm.leaveManagementService.entitys;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +16,7 @@ public class LeaveType {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String leaveType;
+	@JsonBackReference
 	@OneToMany(mappedBy = "leaveType")
 	private Set<LeaveRequest> leaveRequests;
 

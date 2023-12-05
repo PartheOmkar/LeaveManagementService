@@ -21,7 +21,7 @@ import com.erpm.leaveManagementService.services.LeaveTypeService;
 public class LeaveTypeController {
 
 	@Autowired
-	LeaveTypeService leaveTypeService;
+	private LeaveTypeService leaveTypeService;
 
 	@PostMapping
 	public ResponseEntity<LeaveType> addLeaveType(@RequestBody LeaveType newleaveType) {

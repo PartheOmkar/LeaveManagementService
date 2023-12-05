@@ -18,11 +18,11 @@ import com.erpm.leaveManagementService.repositorys.LeaveRepository;
 public class LeaveService {
 
 	@Autowired
-	LeaveRepository leaveRepository;
+	private LeaveRepository leaveRepository;
 	@Autowired
-	LeaveTypeService leaveTypeService;
+	private LeaveTypeService leaveTypeService;
 	@Autowired
-	LeaveStatusService leaveStatusService;
+	private LeaveStatusService leaveStatusService;
 
 	public LeaveRequestDto leaveRequest(LeaveRequestDto newleaveRequest) throws LeaveTypeNotFound, LeaveStatusNotFound {
 		LeaveRequestDto leaveRequest = null;
@@ -52,7 +52,8 @@ public class LeaveService {
 		return leaveRepository.findAll().stream().map(leaveRequest -> new LeaveRequestDto(leaveRequest)).toList();
 	}
 
-	public LeaveRequestDto updateLeaveRequest(LeaveRequestDto newleaveRequest) throws LeaveRequestNotFound, LeaveStatusNotFound {
+	public LeaveRequestDto updateLeaveRequest(LeaveRequestDto newleaveRequest)
+			throws LeaveRequestNotFound, LeaveStatusNotFound {
 		LeaveRequestDto leaveRequestDto = null;
 		try {
 			LeaveRequest leaveRequest = leaveRepository.findById(newleaveRequest.getId()).get();
@@ -70,7 +71,7 @@ public class LeaveService {
 	}
 
 	public LeaveRequest getLeaveRequest(LeaveRequestDto leaveRequestDto) throws LeaveTypeNotFound, LeaveStatusNotFound {
-		LeaveRequest leaveRequest= new LeaveRequest();
+		LeaveRequest leaveRequest = new LeaveRequest();
 		leaveRequest.setEmployeeId(leaveRequestDto.getEmployeeId());
 		leaveRequest.setStartDate(leaveRequestDto.getStartDate());
 		leaveRequest.setEndDate(leaveRequestDto.getEndDate());
@@ -80,5 +81,17 @@ public class LeaveService {
 		leaveRequest.setAdditionalComments(leaveRequestDto.getAdditionalComments());
 		leaveRequest.setApproverId(leaveRequestDto.getApproverId());
 		return leaveRequest;
+	}
+
+	public List<LeaveRequestDto> getLeaveRequestByEmployeeId(int employeeId) {
+		List<LeaveRequestDto> leaves = leaveRepository.findByEmployeeId(employeeId).stream()
+				.map(leave -> new LeaveRequestDto(leave)).toList();
+		return leaves;
+	}
+
+	public List<LeaveRequestDto> getLeaveRequestByApprovalId(int approvarId) {
+		List<LeaveRequestDto> leaves = leaveRepository.findByApproverId(approvarId).stream()
+				.map(leave -> new LeaveRequestDto(leave)).toList();
+		return leaves;
 	}
 }

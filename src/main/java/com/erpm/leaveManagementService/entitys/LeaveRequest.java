@@ -2,6 +2,8 @@ package com.erpm.leaveManagementService.entitys;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,8 +20,10 @@ public class LeaveRequest {
 	private int employeeId;
 	private LocalDate startDate;
 	private LocalDate endDate;
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL)
 	private LeaveType leaveType;
+	@JsonManagedReference
 	@ManyToOne(cascade = CascadeType.ALL)
 	private LeaveStatus status;
 	private String reason;

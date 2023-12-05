@@ -15,11 +15,11 @@ public class LeaveRequestDto {
 	private String reason;
 	private String additionalComments;
 	private int approverId;
-	
+
 	public LeaveRequestDto() {
-		
+
 	}
-	
+
 	public LeaveRequestDto(LeaveRequest leaveRequest) {
 		this.id = leaveRequest.getId();
 		this.employeeId = leaveRequest.getEmployeeId();
@@ -31,7 +31,7 @@ public class LeaveRequestDto {
 		this.additionalComments = leaveRequest.getAdditionalComments();
 		this.approverId = leaveRequest.getApproverId();
 	}
-	
+
 	public int getId() {
 		return id;
 	}

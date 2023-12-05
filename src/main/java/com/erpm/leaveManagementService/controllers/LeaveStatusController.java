@@ -21,7 +21,7 @@ import com.erpm.leaveManagementService.services.LeaveStatusService;
 public class LeaveStatusController {
 
 	@Autowired
-	LeaveStatusService leaveStatusService;
+	private LeaveStatusService leaveStatusService;
 	
 	@PostMapping
 	public ResponseEntity<LeaveStatus> addLeaveStatus(@RequestBody LeaveStatus leaveStatus) {
