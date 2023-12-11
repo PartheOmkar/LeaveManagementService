@@ -42,9 +42,9 @@ public class LeaveController {
 	@GetMapping
 	public ResponseEntity<List<LeaveRequestDto>> getLeaveRequests() {
 		List<LeaveRequestDto> leaveRequests = leaveService.getLeaveRequests();
-		if (leaveRequests == null) {
-			return ResponseEntity.noContent().build();
-		}
+//		if (leaveRequests == null) {
+//			return ResponseEntity.noContent().build();
+//		}
 		return ResponseEntity.ok(leaveRequests);
 	}
 
@@ -52,9 +52,9 @@ public class LeaveController {
 	public ResponseEntity<LeaveRequestDto> updateLeaveRequest(@RequestBody LeaveRequestDto leaveRequest)
 			throws LeaveRequestNotFound, LeaveStatusNotFound {
 		LeaveRequestDto updatedleaveRequest = leaveService.updateLeaveRequest(leaveRequest);
-		if (updatedleaveRequest == null) {
-			return ResponseEntity.noContent().build();
-		}
+//		if (updatedleaveRequest == null) {
+//			return ResponseEntity.noContent().build();
+//		}
 		return ResponseEntity.ok(updatedleaveRequest);
 	}
 

@@ -71,6 +71,9 @@ public class LeaveService {
 	}
 
 	public LeaveRequest getLeaveRequest(LeaveRequestDto leaveRequestDto) throws LeaveTypeNotFound, LeaveStatusNotFound {
+		if(leaveRequestDto==null) {
+			return null;
+		}
 		LeaveRequest leaveRequest = new LeaveRequest();
 		leaveRequest.setEmployeeId(leaveRequestDto.getEmployeeId());
 		leaveRequest.setStartDate(leaveRequestDto.getStartDate());
